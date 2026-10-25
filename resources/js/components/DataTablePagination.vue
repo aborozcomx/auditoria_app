@@ -139,7 +139,7 @@ const onPerPageChange = (event: Event) => {
                         v-else
                         class="px-2 text-xs text-muted-foreground"
                         v-html="link.label"
-                    />
+                    ></span>
                 </template>
             </template>
 
