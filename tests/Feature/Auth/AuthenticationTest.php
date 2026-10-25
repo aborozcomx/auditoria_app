@@ -66,6 +66,22 @@ test('users can logout', function () {
     $this->assertGuest();
 });
 
+test('logout redirects to https when behind a trusted proxy', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->withHeaders([
+            'X-Forwarded-Proto' => 'https',
+            'X-Forwarded-Host' => 'auditoria.plixelo.com',
+            'X-Forwarded-Port' => '443',
+        ])
+        ->post(route('logout'));
+
+    $response->assertRedirect('https://auditoria.plixelo.com');
+
+    $this->assertGuest();
+});
+
 test('users are rate limited', function () {
     $user = User::factory()->create();
 
