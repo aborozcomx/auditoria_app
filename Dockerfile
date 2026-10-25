@@ -38,7 +38,8 @@ COPY --from=composer-builder /app/resources/js/actions ./resources/js/actions
 COPY --from=composer-builder /app/resources/js/routes ./resources/js/routes
 COPY --from=composer-builder /app/resources/js/wayfinder ./resources/js/wayfinder
 
-ENV NODE_ENV=production
+ENV NODE_ENV=production \
+    WAYFINDER_COMMAND=true
 RUN npm run build
 
 # ------------------------------------------------------------------------------
