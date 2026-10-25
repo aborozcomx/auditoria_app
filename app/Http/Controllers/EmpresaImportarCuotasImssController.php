@@ -120,11 +120,13 @@ class EmpresaImportarCuotasImssController extends Controller
             ->withQueryString();
 
         $periodosDisponibles = $importacion->cuotas()
+            ->whereNotNull('periodo')
             ->select('periodo')
             ->distinct()
-            ->orderByRaw('CAST(periodo AS UNSIGNED) ASC, periodo ASC')
             ->pluck('periodo')
-            ->toArray();
+            ->sortBy(fn ($p) => is_numeric($p) ? (int) $p : $p, SORT_NATURAL)
+            ->values()
+            ->all();
 
         return Inertia::render('empresas/ImportacionCuotasProgreso', [
             'empresa' => $empresa,

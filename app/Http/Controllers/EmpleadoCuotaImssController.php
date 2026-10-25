@@ -123,11 +123,13 @@ class EmpleadoCuotaImssController extends Controller
         $periodos = EmpleadoCuotaImss::query()
             ->when($empresaId, fn ($q) => $q->where('empresa_id', $empresaId))
             ->when($anio, fn ($q) => $q->where('anio', $anio))
+            ->whereNotNull('periodo')
             ->select('periodo')
             ->distinct()
-            ->orderByRaw('CAST(periodo AS UNSIGNED) ASC, periodo ASC')
             ->pluck('periodo')
-            ->toArray();
+            ->sortBy(fn ($p) => is_numeric($p) ? (int) $p : $p, SORT_NATURAL)
+            ->values()
+            ->all();
 
         return Inertia::render('cuotas-imss/Index', [
             'cuotas' => $cuotas,
